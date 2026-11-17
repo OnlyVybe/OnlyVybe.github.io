@@ -1,0 +1,18 @@
+---
+const { variant = 'space' } = Astro.props;
+---
+{variant === 'identity' ? (
+  <div class="brand-3d brand-3d-identity" aria-label="Объёмная визуализация бренда ONLY">
+    <div class="brand-3d-glow" aria-hidden="true"></div>
+    <div class="brand-3d-word" aria-hidden="true">ONLY</div>
+    <div class="brand-3d-caption">IDENTITY / 01</div>
+  </div>
+) : (
+  <div class="space-3d" aria-label="Цифровое пространство проекта ONLY">
+    <div class="space-3d-grid" aria-hidden="true"></div>
+    <div class="space-3d-orbit space-3d-orbit-one" aria-hidden="true"></div>
+    <div class="space-3d-orbit space-3d-orbit-two" aria-hidden="true"></div>
+    <div class="space-3d-core" aria-hidden="true"><span>O</span></div>
+    <div class="space-3d-label">ONLY / DIGITAL SPACE</div>
+  </div>
+)}

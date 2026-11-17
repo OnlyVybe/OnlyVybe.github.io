@@ -1,2 +1,3 @@
 
-.project-detail-grid { grid-template-columns:1fr; gap:22px; }
+.visual-layout, .visual-layout-identity { grid-template-columns:1fr; gap:28px; }
+.space-3d, .brand-3d { min-height:250px; }

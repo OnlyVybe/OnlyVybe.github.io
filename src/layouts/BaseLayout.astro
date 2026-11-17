@@ -1,6 +1,7 @@
 ---
 import '../styles/global.css';
 import '../styles/responsive-audit.css';
+import '../styles/music-player.css';
 import { siteConfig, socialLinks } from '../data/site';
 const { title = siteConfig.title, description = siteConfig.description, pathname = Astro.url.pathname } = Astro.props;
 const canonical = new URL(pathname, siteConfig.url).toString();
@@ -58,6 +59,12 @@ const github = socialLinks.find((link) => link.label === 'GitHub');
       </nav>
     </header>
     <main><slot /></main>
+    <aside class="music-player" aria-label="Музыкальный плеер">
+      <img class="music-cover" src={siteConfig.avatar} width="48" height="48" alt="Обложка Dreamsphere 7" />
+      <div class="music-meta"><strong>Dreamsphere 7</strong><span>Sascha Ende</span></div>
+      <button class="music-toggle" id="music-toggle" type="button" aria-label="Воспроизвести Dreamsphere 7" aria-pressed="false">▶</button>
+      <audio id="only-audio" loop preload="metadata" src="/audio/dreamsphere-7-by-ende-dot-app.mp3"></audio>
+    </aside>
     <footer class="site-footer"><div class="container footer-inner"><span>© {new Date().getFullYear()} ONLY / OnlyVybe</span><div class="footer-links"><a href="/privacy">Privacy</a><a href="/credits">Credits</a></div></div></footer>
     <script is:inline>
       const themeButton = document.getElementById('theme-toggle');
@@ -65,6 +72,24 @@ const github = socialLinks.find((link) => link.label === 'GitHub');
       const menuToggle = document.getElementById('menu-toggle');
       const mobileMenu = document.getElementById('mobile-menu');
       menuToggle?.addEventListener('click', () => { const open = menuToggle.getAttribute('aria-expanded') === 'true'; menuToggle.setAttribute('aria-expanded', String(!open)); menuToggle.setAttribute('aria-label', open ? 'Открыть меню' : 'Закрыть меню'); if (mobileMenu) mobileMenu.hidden = open; });
+      const audio = document.getElementById('only-audio');
+      const musicToggle = document.getElementById('music-toggle');
+      const musicCover = document.querySelector('.music-cover');
+      const savedTime = Number(localStorage.getItem('only-music-time') || '0');
+      const savedPlaying = localStorage.getItem('only-music-playing') === 'true';
+      if (audio) {
+        audio.volume = 0.12;
+        audio.addEventListener('loadedmetadata', () => { if (savedTime > 0 && savedTime < audio.duration) audio.currentTime = savedTime; });
+        audio.addEventListener('timeupdate', () => localStorage.setItem('only-music-time', String(audio.currentTime)));
+        audio.addEventListener('play', () => { localStorage.setItem('only-music-playing', 'true'); musicToggle?.setAttribute('aria-pressed', 'true'); musicToggle?.setAttribute('aria-label', 'Поставить Dreamsphere 7 на паузу'); if (musicToggle) musicToggle.textContent = 'Ⅱ'; musicCover?.classList.add('is-playing'); });
+        audio.addEventListener('pause', () => { localStorage.setItem('only-music-playing', 'false'); musicToggle?.setAttribute('aria-pressed', 'false'); musicToggle?.setAttribute('aria-label', 'Воспроизвести Dreamsphere 7'); if (musicToggle) musicToggle.textContent = '▶'; musicCover?.classList.remove('is-playing'); });
+        musicToggle?.addEventListener('click', () => { if (audio.paused) audio.play().catch(() => {}); else audio.pause(); });
+        const tryAutoplay = () => { if (savedPlaying) audio.play().catch(() => {}); window.removeEventListener('pointerdown', tryAutoplay); window.removeEventListener('keydown', tryAutoplay); };
+        window.addEventListener('pointerdown', tryAutoplay, { once: true });
+        window.addEventListener('keydown', tryAutoplay, { once: true });
+        if (savedPlaying) audio.play().catch(() => {});
+      }
+
     </script>
   </body>
 </html>
