@@ -20,7 +20,10 @@ export const projects = [
     status: 'Публичный проект',
     github: 'https://github.com/OnlyVybe/cleanyourtv-kivi-24h600gr',
     featured: true,
-    problem: 'Пользователю нужна понятная и обратимая настройка Android TV без публикации непроверенных обещаний.',
+    preview: 'https://raw.githubusercontent.com/OnlyVybe/cleanyourtv-kivi-24h600gr/main/screenshots/before-after.png',
+    previewAlt: 'До и после: стоковый лончер KIVI и новый домашний экран Apple TV-style',
+    previewKind: 'image',
+    previewNote: 'Реальный screenshot из публичного README проекта.',
     functionality: ['Документация модели и платформы', 'Инструкции по обратимым настройкам', 'Резервное копирование и восстановление'],
     limitations: 'Совместимость и результат зависят от конкретной модели и версии прошивки; актуальные условия описаны в репозитории.'
   },
@@ -33,6 +36,10 @@ export const projects = [
     status: 'Публичный проект',
     github: 'https://github.com/OnlyVybe/cleanyourtv-samsung-ue32n5300',
     featured: true,
+    previewKind: 'device',
+    previewLabel: 'TIZEN 4.0',
+    previewMeta: 'UE32N5300 / Full HD',
+    previewNote: 'Screenshots не публикуются в upstream README из соображений privacy.',
     problem: 'Нужна документированная настройка приватности Samsung UE32N5300 без root и установки дополнительного ПО.',
     functionality: ['Настройки ACR и необязательных согласий', 'DNS-подход к блокировке телеметрии', 'Пошаговая публичная документация'],
     limitations: 'Доступные параметры зависят от версии Tizen и настроек конкретного телевизора.'
@@ -46,6 +53,10 @@ export const projects = [
     status: 'Публичный проект',
     github: 'https://github.com/OnlyVybe/cleanyourtv-lg-43lj595v',
     featured: false,
+    previewKind: 'device',
+    previewLabel: 'webOS 3.9.3',
+    previewMeta: '43LJ595V-ZD / Full HD',
+    previewNote: 'Screenshots не публикуются в upstream README из соображений privacy.',
     problem: 'Нужна понятная настройка приватности LG 43LJ595V-ZD с учетом возможностей webOS и DNS.',
     functionality: ['Описание доступных пунктов меню', 'Ограничение рекламного отслеживания', 'Инструкции по DNS и проверке изменений'],
     limitations: 'Набор доступных пунктов зависит от версии webOS и региональных настроек.'
