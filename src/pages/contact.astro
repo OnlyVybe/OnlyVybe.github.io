@@ -1,0 +1,9 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import { siteConfig, socialLinks } from '../data/site';
+const github = socialLinks.find((link) => link.label === 'GitHub');
+---
+<BaseLayout title={`Контакты — ${siteConfig.name}`} description="Контактная информация ONLY.">
+  <div class="container page-intro"><p class="eyebrow">Open channel</p><h1>Контакты</h1><p class="lead">Открытый канал для вопросов по публичным проектам, документации и цифровым инструментам.</p></div>
+  <section class="section"><div class="container contact-grid"><div class="card contact-card"><p class="eyebrow">Public channel</p><h2>GitHub</h2><p>Публичные проекты и обратная связь по их документации находятся в GitHub-профиле ONLY.</p>{github && <a class="button button-primary" href={github.href} target="_blank" rel="noopener noreferrer">Открыть GitHub ↗</a>}</div><div class="prose"><p class="eyebrow">Перед сообщением</p><h3>Сделайте вопрос конкретным</h3><p>Укажите проект, версию устройства или окружение, шаги воспроизведения и ожидаемый результат. Не отправляйте секреты, токены и персональные данные.</p><p class="link-meta">Другие каналы связи появятся после добавления подтвержденных публичных URL в <code>src/data/site.ts</code>.</p></div></div></section>
+</BaseLayout>

@@ -1,0 +1,21 @@
+{
+  "name": "only-personal-website",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "description": "Official personal website of ONLY",
+  "scripts": {
+    "dev": "astro dev",
+    "build": "astro build",
+    "preview": "astro preview",
+    "astro": "astro",
+    "typecheck": "tsc --noEmit"
+  },
+  "dependencies": {
+    "astro": "^7.4.12",
+    "typescript": "^5.9.3"
+  },
+  "engines": {
+    "node": ">=20.0.0"
+  }
+}

@@ -1,0 +1,70 @@
+---
+import '../styles/global.css';
+import '../styles/responsive-audit.css';
+import { siteConfig, socialLinks } from '../data/site';
+const { title = siteConfig.title, description = siteConfig.description, pathname = Astro.url.pathname } = Astro.props;
+const canonical = new URL(pathname, siteConfig.url).toString();
+const github = socialLinks.find((link) => link.label === 'GitHub');
+---
+<!doctype html>
+<html lang="ru" data-theme="dark">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width" />
+    <meta name="description" content={description} />
+    <link rel="canonical" href={canonical} />
+    <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
+    <meta property="og:title" content={title} />
+    <meta property="og:description" content={description} />
+    <meta property="og:type" content="website" />
+    <meta property="og:url" content={canonical} />
+    <meta property="og:image" content={new URL(siteConfig.avatar, siteConfig.url).toString()} />
+    <meta name="twitter:card" content="summary_large_image" />
+    <script type="application/ld+json" set:html={JSON.stringify({
+      '@context': 'https://schema.org', '@type': 'Person', name: siteConfig.name,
+      alternateName: siteConfig.handle, url: siteConfig.url,
+      image: new URL(siteConfig.avatar, siteConfig.url).toString(), description: siteConfig.description
+    })} />
+    <title>{title}</title>
+    <script is:inline>
+      const saved = localStorage.getItem('only-theme');
+      if (saved) document.documentElement.dataset.theme = saved;
+    </script>
+  </head>
+  <body>
+    <header class="site-header">
+      <div class="container nav-shell">
+        <div class="nav-capsule">
+          <a class="brand" href="/" aria-label="ONLY, на главную">
+            <span class="brand-lines" aria-hidden="true"><i></i><i></i><i></i></span>
+            <img class="brand-avatar" src={siteConfig.avatar} width="44" height="44" alt="" />
+            <span class="brand-name">ONLY</span>
+          </a>
+          <nav class="nav-links" aria-label="Основная навигация">
+            <a href="/projects" aria-current={pathname.startsWith('/projects') ? 'page' : undefined}>Проекты</a>
+            <a href="/about" aria-current={pathname === '/about' ? 'page' : undefined}>Обо мне</a>
+            <a href="/links" aria-current={pathname === '/links' ? 'page' : undefined}>Ссылки</a>
+            <a href="/contact" aria-current={pathname === '/contact' ? 'page' : undefined}>Контакты</a>
+          </nav>
+          <div class="nav-actions">
+            {github && <a class="github-mini" href={github.href} target="_blank" rel="noopener noreferrer" aria-label="GitHub ONLY">↗</a>}
+            <button class="icon-btn" id="theme-toggle" type="button" aria-label="Переключить тему">◐</button>
+            <button class="icon-btn menu-toggle" id="menu-toggle" type="button" aria-label="Открыть меню" aria-expanded="false" aria-controls="mobile-menu">☰</button>
+          </div>
+        </div>
+      </div>
+      <nav class="mobile-menu container" id="mobile-menu" aria-label="Мобильная навигация" hidden>
+        <a href="/projects">Проекты</a><a href="/about">Обо мне</a><a href="/links">Ссылки</a><a href="/contact">Контакты</a>
+      </nav>
+    </header>
+    <main><slot /></main>
+    <footer class="site-footer"><div class="container footer-inner"><span>© {new Date().getFullYear()} ONLY / OnlyVybe</span><div class="footer-links"><a href="/privacy">Privacy</a><a href="/credits">Credits</a></div></div></footer>
+    <script is:inline>
+      const themeButton = document.getElementById('theme-toggle');
+      themeButton?.addEventListener('click', () => { const next = document.documentElement.dataset.theme === 'light' ? 'dark' : 'light'; document.documentElement.dataset.theme = next; localStorage.setItem('only-theme', next); });
+      const menuToggle = document.getElementById('menu-toggle');
+      const mobileMenu = document.getElementById('mobile-menu');
+      menuToggle?.addEventListener('click', () => { const open = menuToggle.getAttribute('aria-expanded') === 'true'; menuToggle.setAttribute('aria-expanded', String(!open)); menuToggle.setAttribute('aria-label', open ? 'Открыть меню' : 'Закрыть меню'); if (mobileMenu) mobileMenu.hidden = open; });
+    </script>
+  </body>
+</html>

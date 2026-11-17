@@ -1,0 +1,10 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import { siteConfig, socialLinks } from '../data/site';
+const groups = [...new Set(socialLinks.map((link) => link.group))];
+const iconLabels: Record<string, string> = { github: 'GH', telegram: 'TG', vk: 'VK', message: 'M', discord: 'DS', steam: 'S', youtube: 'YT' };
+---
+<BaseLayout title={`Ссылки — ${siteConfig.name}`} description="Публичные профили и контактные каналы ONLY.">
+  <div class="container page-intro"><p class="eyebrow">Public channels</p><h1>Ссылки</h1><p class="lead">Одна точка входа для публичных профилей ONLY. В список попадают только подтвержденные URL.</p></div>
+  <section class="section"><div class="container link-groups">{groups.map(group => <div><p class="eyebrow">{group}</p><div class="link-groups">{socialLinks.filter(link => link.group === group).map(link => <a class="link-row" href={link.href} target="_blank" rel="noopener noreferrer"><span class={`social-icon social-${link.icon}`} aria-hidden="true">{iconLabels[link.icon]}</span><span class="link-copy"><strong>{link.label}</strong><span class="link-meta">Публичный профиль</span></span><span class="link-arrow" aria-hidden="true">↗</span></a>)}</div></div>)}</div></section>
+</BaseLayout>

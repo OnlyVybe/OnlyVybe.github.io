@@ -1,0 +1,3 @@
+User-agent: *
+Allow: /
+Sitemap: https://onlyvybe.github.io/sitemap.xml
