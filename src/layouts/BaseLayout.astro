@@ -38,8 +38,8 @@ const github = socialLinks.find((link) => link.label === 'GitHub');
     <header class="site-header">
       <div class="container nav-shell">
         <div class="nav-capsule">
+          <button class="nav-lines-button" type="button" data-menu-toggle aria-label="Открыть меню" aria-expanded="false" aria-controls="mobile-menu"><span class="brand-lines" aria-hidden="true"><i></i><i></i><i></i></span></button>
           <a class="brand" href="/" aria-label="ONLY, на главную">
-            <span class="brand-lines" aria-hidden="true"><i></i><i></i><i></i></span>
             <img class="brand-avatar" src={siteConfig.avatar} width="44" height="44" alt="" />
             <span class="brand-name">ONLY</span>
           </a>
@@ -52,7 +52,7 @@ const github = socialLinks.find((link) => link.label === 'GitHub');
           <div class="nav-actions">
             {github && <a class="github-mini" href={github.href} target="_blank" rel="noopener noreferrer" aria-label="GitHub ONLY">↗</a>}
             <button class="icon-btn" id="theme-toggle" type="button" aria-label="Переключить тему">◐</button>
-            <button class="icon-btn menu-toggle" id="menu-toggle" type="button" aria-label="Открыть меню" aria-expanded="false" aria-controls="mobile-menu">☰</button>
+            <button class="icon-btn menu-toggle" id="menu-toggle" data-menu-toggle type="button" aria-label="Открыть меню" aria-expanded="false" aria-controls="mobile-menu">☰</button>
           </div>
         </div>
       </div>
@@ -71,9 +71,11 @@ const github = socialLinks.find((link) => link.label === 'GitHub');
     <script is:inline>
       const themeButton = document.getElementById('theme-toggle');
       themeButton?.addEventListener('click', () => { const next = document.documentElement.dataset.theme === 'light' ? 'dark' : 'light'; document.documentElement.dataset.theme = next; localStorage.setItem('only-theme', next); });
-      const menuToggle = document.getElementById('menu-toggle');
+      const menuToggles = [...document.querySelectorAll('[data-menu-toggle]')];
       const mobileMenu = document.getElementById('mobile-menu');
-      menuToggle?.addEventListener('click', () => { const open = menuToggle.getAttribute('aria-expanded') === 'true'; menuToggle.setAttribute('aria-expanded', String(!open)); menuToggle.setAttribute('aria-label', open ? 'Открыть меню' : 'Закрыть меню'); if (mobileMenu) mobileMenu.hidden = open; });
+      const setMenu = (open) => { menuToggles.forEach((button) => { button.setAttribute('aria-expanded', String(open)); button.setAttribute('aria-label', open ? 'Закрыть меню' : 'Открыть меню'); }); if (mobileMenu) mobileMenu.hidden = !open; };
+      menuToggles.forEach((button) => button.addEventListener('click', () => setMenu(button.getAttribute('aria-expanded') !== 'true')));
+      document.addEventListener('keydown', (event) => { if (event.key === 'Escape') setMenu(false); });
       const audio = document.getElementById('only-audio');
       const musicToggle = document.getElementById('music-toggle');
       const musicCover = document.querySelector('.music-cover');

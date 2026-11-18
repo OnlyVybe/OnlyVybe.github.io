@@ -52,7 +52,7 @@ export const projects = [
     technologies: ['webOS', 'DNS', 'Documentation'],
     status: 'Публичный проект',
     github: 'https://github.com/OnlyVybe/cleanyourtv-lg-43lj595v',
-    featured: false,
+    featured: true,
     previewKind: 'device',
     previewLabel: 'webOS 3.9.3',
     previewMeta: '43LJ595V-ZD / Full HD',
@@ -64,14 +64,10 @@ export const projects = [
 ];
 
 export const socialLinks = [
-  { label: 'GitHub', href: 'https://github.com/OnlyVybe', group: 'Разработка и технологии', icon: 'github' },
-  { label: 'Telegram', href: '', group: 'Общение', icon: 'telegram' },
-  { label: 'VK', href: '', group: 'Общение', icon: 'vk' },
-  { label: 'MAX', href: '', group: 'Общение', icon: 'message' },
-  { label: 'Discord', href: '', group: 'Общение', icon: 'discord' },
-  { label: 'Steam', href: '', group: 'Игры и развлечения', icon: 'steam' },
-  { label: 'YouTube', href: '', group: 'Игры и развлечения', icon: 'youtube' },
-].filter((link) => link.href);
+  { label: 'GitHub', href: 'https://github.com/OnlyVybe', group: 'Разработка и технологии', icon: 'github', available: true },
+  { label: 'Telegram', href: '', group: 'Общение', icon: 'telegram', available: false },
+  { label: 'ВКонтакте', href: '', group: 'Общение', icon: 'vk', available: false },
+];
 
 export const focusAreas = [
   { number: '01', title: 'Software', text: 'Инструменты и системы, которые решают конкретную задачу.' },

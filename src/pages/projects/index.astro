@@ -1,37 +1,57 @@
 ---
 import BaseLayout from '../../layouts/BaseLayout.astro';
 import { projects, siteConfig } from '../../data/site';
-const categories = ['Все', ...new Set(projects.map((project) => project.category))];
+const categories = ['Все', 'Smart TV', 'Privacy'];
 const categoryDescriptions: Record<string, string> = {
-  'Все': 'Все подтвержденные публичные проекты.',
-  'Smart TV': 'Инструменты и документация для телевизионных платформ.',
-  Privacy: 'Практические настройки приватности и контроля телеметрии.'
+  'Все': 'Все три подтверждённых публичных проекта.',
+  'Smart TV': 'CleanYourTV для KIVI 24H600GR — отдельная полноразмерная карточка.',
+  Privacy: 'Два privacy-проекта. Переключайте страницы 1 и 2 ниже.'
 };
 ---
 <BaseLayout title={`Проекты — ${siteConfig.name}`} description="Публичные проекты ONLY: инструменты, документация и исследования.">
-  <div class="container page-intro"><p class="eyebrow">Selected work</p><h1>Проекты</h1><p class="lead">Портфолио состоит только из материалов, которые доступны публично и могут быть проверены посетителем.</p></div>
+  <div class="container page-intro"><p class="eyebrow">Selected work</p><h1>Проекты</h1><p class="lead">Выберите направление. Smart TV открывает проект KIVI, а Privacy — две отдельные страницы проектов Samsung и LG.</p></div>
   <section class="section"><div class="container">
-    <div class="filter-bar" role="group" aria-label="Фильтр проектов по категории">{categories.map((category, index) => <button class="filter-button" type="button" data-filter={category} aria-pressed={index === 0 ? 'true' : 'false'}>{category}</button>)}</div>
+    <div class="filter-bar project-tabs" role="tablist" aria-label="Категории проектов">{categories.map((category, index) => <button class="filter-button" role="tab" type="button" data-filter={category} aria-selected={index === 0 ? 'true' : 'false'} aria-controls="project-list">{category}</button>)}</div>
     <p class="filter-description" id="filter-description">{categoryDescriptions['Все']}</p>
     <p class="sr-only" id="project-count" aria-live="polite">Показано проектов: {projects.length}</p>
-    <div class="grid-3 project-grid" id="project-list">{projects.map((project) => <article class="card project-card" data-category={project.category}>
+    <div class="grid-3 project-grid" id="project-list">{projects.map((project, index) => <article class="card project-card" data-category={project.category} data-project-index={index}>
       {project.previewKind === 'image' ? <img class="project-preview" src={project.preview} alt={project.previewAlt} loading="lazy" width="1200" height="675" /> : <div class="project-preview project-device-preview" aria-label={`Визуальная карточка устройства ${project.previewMeta}`}><span>{project.previewLabel}</span><small>{project.previewMeta}</small><i></i></div>}
-      <div class="project-card-body"><span class="card-kicker">{project.category}</span><h3>{project.title}</h3><p>{project.description}</p><div class="tags">{project.technologies.map(t => <span class="tag">{t}</span>)}</div><p class="preview-note">{project.previewNote}</p><div class="card-footer"><a class="button button-secondary" href={`/projects/${project.slug}`}>О проекте →</a><a class="project-github-link" href={project.github} target="_blank" rel="noopener noreferrer" aria-label={`GitHub проекта ${project.title}`}>GitHub ↗</a></div></div>
+      <div class="project-card-body"><span class="card-kicker">{project.category}</span><h2>{project.title}</h2><p>{project.description}</p><div class="tags">{project.technologies.map(t => <span class="tag">{t}</span>)}</div><p class="preview-note">{project.previewNote}</p><div class="card-footer"><a class="button button-primary" href={`/projects/${project.slug}`}>Открыть проект →</a><a class="project-github-link" href={project.github} target="_blank" rel="noopener noreferrer" aria-label={`GitHub проекта ${project.title}`}>GitHub ↗</a></div></div>
     </article>)}</div>
+    <nav class="project-pagination" id="project-pagination" aria-label="Страницы проектов Privacy" hidden><button type="button" class="page-button" data-page="0" aria-current="page">1</button><button type="button" class="page-button" data-page="1">2</button></nav>
   </div></section>
   <script>
-    const descriptions = { 'Все': 'Все подтвержденные публичные проекты.', 'Smart TV': 'Инструменты и документация для телевизионных платформ.', 'Privacy': 'Практические настройки приватности и контроля телеметрии.' };
-    const filters = [...document.querySelectorAll<HTMLButtonElement>('.filter-button')];
+    const descriptions = { 'Все': 'Все три подтверждённых публичных проекта.', 'Smart TV': 'CleanYourTV для KIVI 24H600GR — отдельная полноразмерная карточка.', Privacy: 'Два privacy-проекта. Переключайте страницы 1 и 2 ниже.' };
+    const filters = [...document.querySelectorAll<HTMLButtonElement>('.filter-button[data-filter]')];
     const cards = [...document.querySelectorAll<HTMLElement>('.project-card[data-category]')];
     const count = document.getElementById('project-count');
     const description = document.getElementById('filter-description');
-    filters.forEach((filter) => filter.addEventListener('click', () => {
-      const value = filter.dataset.filter || 'Все';
-      filters.forEach((button) => button.setAttribute('aria-pressed', String(button === filter)));
+    const grid = document.getElementById('project-list');
+    const pagination = document.getElementById('project-pagination');
+    const pageButtons = [...document.querySelectorAll<HTMLButtonElement>('.page-button')];
+    let activeFilter = 'Все';
+    let privacyPage = 0;
+    const render = () => {
       let visible = 0;
-      cards.forEach((card) => { const show = value === 'Все' || card.dataset.category === value; card.hidden = !show; if (show) visible += 1; });
+      const privacyCards = cards.filter(card => card.dataset.category === 'Privacy');
+      cards.forEach((card) => {
+        let show = activeFilter === 'Все' || card.dataset.category === activeFilter;
+        if (activeFilter === 'Privacy') show = card === privacyCards[privacyPage];
+        card.hidden = !show;
+        if (show) visible += 1;
+      });
+      grid?.classList.toggle('is-single', activeFilter !== 'Все');
+      if (pagination) pagination.hidden = activeFilter !== 'Privacy';
+      pageButtons.forEach((button, index) => button.setAttribute('aria-current', index === privacyPage ? 'page' : 'false'));
       if (count) count.textContent = `Показано проектов: ${visible}`;
-      if (description) description.textContent = descriptions[value as keyof typeof descriptions] || '';
+      if (description) description.textContent = descriptions[activeFilter as keyof typeof descriptions] || '';
+    };
+    filters.forEach((filter) => filter.addEventListener('click', () => {
+      activeFilter = filter.dataset.filter || 'Все'; privacyPage = 0;
+      filters.forEach((button) => button.setAttribute('aria-selected', String(button === filter)));
+      render();
     }));
+    pageButtons.forEach((button) => button.addEventListener('click', () => { privacyPage = Number(button.dataset.page || 0); render(); grid?.scrollIntoView({ behavior: 'smooth', block: 'start' }); }));
+    render();
   </script>
 </BaseLayout>
