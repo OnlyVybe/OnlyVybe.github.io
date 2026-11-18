@@ -9,10 +9,17 @@ const { variant = 'space' } = Astro.props;
   </div>
 ) : (
   <div class="space-3d" aria-label="Цифровое пространство проекта ONLY">
+    <div class="space-3d-stars" aria-hidden="true"></div>
     <div class="space-3d-grid" aria-hidden="true"></div>
     <div class="space-3d-orbit space-3d-orbit-one" aria-hidden="true"></div>
     <div class="space-3d-orbit space-3d-orbit-two" aria-hidden="true"></div>
-    <div class="space-3d-core" aria-hidden="true"><span>O</span></div>
+    <div class="space-3d-panel panel-code" aria-hidden="true"><b>01</b><span>SYSTEM</span><i></i><i></i><i></i></div>
+    <div class="space-3d-panel panel-data" aria-hidden="true"><span>DATA</span><b>◌</b></div>
+    <div class="space-3d-node node-one" aria-hidden="true"></div>
+    <div class="space-3d-node node-two" aria-hidden="true"></div>
+    <div class="space-3d-node node-three" aria-hidden="true"></div>
+    <div class="space-3d-core" aria-hidden="true"><span>O</span><small>ONLY</small></div>
     <div class="space-3d-label">ONLY / DIGITAL SPACE</div>
+    <div class="space-3d-status">SYSTEM ONLINE <i></i></div>
   </div>
 )}

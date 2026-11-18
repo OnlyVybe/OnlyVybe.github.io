@@ -38,11 +38,14 @@ const github = socialLinks.find((link) => link.label === 'GitHub');
     <header class="site-header">
       <div class="container nav-shell">
         <div class="nav-capsule">
-          <button class="nav-lines-button" type="button" data-menu-toggle aria-label="Открыть меню" aria-expanded="false" aria-controls="mobile-menu"><span class="brand-lines" aria-hidden="true"><i></i><i></i><i></i></span></button>
-          <a class="brand" href="/" aria-label="ONLY, на главную">
-            <img class="brand-avatar" src={siteConfig.avatar} width="44" height="44" alt="" />
-            <span class="brand-name">ONLY</span>
-          </a>
+          <div class="nav-dropdown">
+            <button class="nav-lines-button" type="button" data-dropdown-toggle="nav-menu-left" aria-label="Открыть меню" aria-expanded="false"><span class="brand-lines" aria-hidden="true"><i></i><i></i><i></i></span></button>
+            <nav class="compact-dropdown" id="nav-menu-left" aria-label="Меню сайта" hidden><a href="/">Главная</a><a href="/projects">Проекты</a><a href="/about">Обо мне</a><a href="/links">Ссылки</a><a href="/contact">Контакты</a></nav>
+          </div>
+          <div class="nav-dropdown">
+            <button class="brand" type="button" data-dropdown-toggle="brand-menu" aria-label="Открыть меню главной страницы" aria-expanded="false"><img class="brand-avatar" src={siteConfig.avatar} width="44" height="44" alt="" /><span class="brand-name">ONLY</span><span class="dropdown-caret" aria-hidden="true">⌄</span></button>
+            <nav class="compact-dropdown brand-dropdown" id="brand-menu" aria-label="Главная страница" hidden><a href="/">Главная</a></nav>
+          </div>
           <nav class="nav-links" aria-label="Основная навигация">
             <a href="/projects" aria-current={pathname.startsWith('/projects') ? 'page' : undefined}>Проекты</a>
             <a href="/about" aria-current={pathname === '/about' ? 'page' : undefined}>Обо мне</a>
@@ -50,15 +53,12 @@ const github = socialLinks.find((link) => link.label === 'GitHub');
             <a href="/contact" aria-current={pathname === '/contact' ? 'page' : undefined}>Контакты</a>
           </nav>
           <div class="nav-actions">
-            {github && <a class="github-mini" href={github.href} target="_blank" rel="noopener noreferrer" aria-label="GitHub ONLY">↗</a>}
+            {github && <div class="nav-dropdown"><button class="github-mini" type="button" data-dropdown-toggle="github-menu" aria-label="Открыть меню GitHub" aria-expanded="false">↗</button><nav class="compact-dropdown dropdown-right" id="github-menu" aria-label="GitHub" hidden><a href={github.href} target="_blank" rel="noopener noreferrer">GitHub ↗</a></nav></div>}
             <button class="icon-btn" id="theme-toggle" type="button" aria-label="Переключить тему">◐</button>
-            <button class="icon-btn menu-toggle" id="menu-toggle" data-menu-toggle type="button" aria-label="Открыть меню" aria-expanded="false" aria-controls="mobile-menu">☰</button>
+            <div class="nav-dropdown"><button class="icon-btn menu-toggle" id="menu-toggle" type="button" data-dropdown-toggle="nav-menu-right" aria-label="Открыть меню" aria-expanded="false">☰</button><nav class="compact-dropdown dropdown-right" id="nav-menu-right" aria-label="Меню сайта" hidden><a href="/">Главная</a><a href="/projects">Проекты</a><a href="/about">Обо мне</a><a href="/links">Ссылки</a><a href="/contact">Контакты</a></nav></div>
           </div>
         </div>
       </div>
-      <nav class="mobile-menu container" id="mobile-menu" aria-label="Мобильная навигация" hidden>
-        <a href="/projects">Проекты</a><a href="/about">Обо мне</a><a href="/links">Ссылки</a><a href="/contact">Контакты</a>
-      </nav>
     </header>
     <main><slot /></main>
     <aside class="music-player" aria-label="Музыкальный плеер">
@@ -71,11 +71,11 @@ const github = socialLinks.find((link) => link.label === 'GitHub');
     <script is:inline>
       const themeButton = document.getElementById('theme-toggle');
       themeButton?.addEventListener('click', () => { const next = document.documentElement.dataset.theme === 'light' ? 'dark' : 'light'; document.documentElement.dataset.theme = next; localStorage.setItem('only-theme', next); });
-      const menuToggles = [...document.querySelectorAll('[data-menu-toggle]')];
-      const mobileMenu = document.getElementById('mobile-menu');
-      const setMenu = (open) => { menuToggles.forEach((button) => { button.setAttribute('aria-expanded', String(open)); button.setAttribute('aria-label', open ? 'Закрыть меню' : 'Открыть меню'); }); if (mobileMenu) mobileMenu.hidden = !open; };
-      menuToggles.forEach((button) => button.addEventListener('click', () => setMenu(button.getAttribute('aria-expanded') !== 'true')));
-      document.addEventListener('keydown', (event) => { if (event.key === 'Escape') setMenu(false); });
+      const dropdownToggles = [...document.querySelectorAll('[data-dropdown-toggle]')];
+      const closeDropdowns = (except) => dropdownToggles.forEach((button) => { const menu = document.getElementById(button.dataset.dropdownToggle); if (menu !== except) { button.setAttribute('aria-expanded', 'false'); if (menu) menu.hidden = true; } });
+      dropdownToggles.forEach((button) => button.addEventListener('click', (event) => { event.stopPropagation(); const menu = document.getElementById(button.dataset.dropdownToggle); const open = button.getAttribute('aria-expanded') !== 'true'; closeDropdowns(menu); button.setAttribute('aria-expanded', String(open)); if (menu) menu.hidden = !open; }));
+      document.addEventListener('click', (event) => { if (!event.target.closest('.nav-dropdown')) closeDropdowns(); });
+      document.addEventListener('keydown', (event) => { if (event.key === 'Escape') closeDropdowns(); });
       const audio = document.getElementById('only-audio');
       const musicToggle = document.getElementById('music-toggle');
       const musicCover = document.querySelector('.music-cover');

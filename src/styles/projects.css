@@ -28,10 +28,7 @@
 .project-grid.is-single .project-card-body h2 { max-width:720px; font-size:clamp(2rem,4vw,3.8rem); line-height:1.05; margin:12px 0 20px; }
 .project-grid.is-single .project-card-body > p { max-width:760px; font-size:clamp(1rem,1.4vw,1.18rem); }
 .project-grid.is-single .project-device-preview span { font-size:clamp(2.4rem,6vw,5rem); }
-.project-pagination { display:flex; justify-content:center; gap:10px; margin-top:26px; }
-.project-pagination[hidden] { display:none; }
-.page-button { width:46px; height:46px; border:1px solid var(--border); border-radius:50%; color:var(--text-2); background:var(--surface); font:inherit; font-weight:800; cursor:pointer; }
-.page-button[aria-current='page'] { color:#171126; background:var(--accent); border-color:var(--accent); }
+.project-grid.is-filtered-grid { grid-template-columns:repeat(2,minmax(0,1fr)); }
 
 @media (max-width: 760px) {
   .project-card { min-height:0; }
@@ -46,4 +43,5 @@
   .project-grid.is-single .project-card-body { padding:24px; }
   .project-grid.is-single .project-card-body h2 { font-size:clamp(1.7rem,9vw,2.5rem); }
   .project-tabs .filter-button { min-width:0; flex:1 1 auto; }
+  .project-grid.is-filtered-grid { grid-template-columns:1fr; }
 }
