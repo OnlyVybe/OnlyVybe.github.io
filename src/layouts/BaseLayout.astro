@@ -6,6 +6,7 @@ import '../styles/projects.css';
 import '../styles/responsive-projects.css';
 import { siteConfig, socialLinks } from '../data/site';
 const { title = siteConfig.title, description = siteConfig.description, pathname = Astro.url.pathname } = Astro.props;
+const normalizedPath = pathname.length > 1 ? pathname.replace(/\/$/, '') : pathname;
 const canonical = new URL(pathname, siteConfig.url).toString();
 const github = socialLinks.find((link) => link.label === 'GitHub');
 ---
@@ -47,10 +48,10 @@ const github = socialLinks.find((link) => link.label === 'GitHub');
             <nav class="compact-dropdown brand-dropdown" id="brand-menu" aria-label="Главная страница" hidden><a href="/">Главная</a></nav>
           </div>
           <nav class="nav-links" aria-label="Основная навигация">
-            <a href="/projects" aria-current={pathname.startsWith('/projects') ? 'page' : undefined}>Проекты</a>
-            <a href="/about" aria-current={pathname === '/about' ? 'page' : undefined}>Обо мне</a>
-            <a href="/links" aria-current={pathname === '/links' ? 'page' : undefined}>Ссылки</a>
-            <a href="/contact" aria-current={pathname === '/contact' ? 'page' : undefined}>Контакты</a>
+            <a href="/projects" aria-current={normalizedPath.startsWith('/projects') ? 'page' : undefined}>Проекты</a>
+            <a href="/about" aria-current={normalizedPath === '/about' ? 'page' : undefined}>Обо мне</a>
+            <a href="/links" aria-current={normalizedPath === '/links' ? 'page' : undefined}>Ссылки</a>
+            <a href="/contact" aria-current={normalizedPath === '/contact' ? 'page' : undefined}>Контакты</a>
           </nav>
           <div class="nav-actions">
             {github && <div class="nav-dropdown"><button class="github-mini" type="button" data-dropdown-toggle="github-menu" aria-label="Открыть меню GitHub" aria-expanded="false">↗</button><nav class="compact-dropdown dropdown-right" id="github-menu" aria-label="GitHub" hidden><a href={github.href} target="_blank" rel="noopener noreferrer">GitHub ↗</a></nav></div>}
