@@ -2,19 +2,21 @@
 const { variant = 'space' } = Astro.props;
 ---
 {variant === 'identity' ? (
-  <div class="brand-3d brand-3d-identity" aria-label="Объёмная визуализация бренда ONLY">
-    <div class="brand-3d-stars" aria-hidden="true"></div>
-    <div class="brand-3d-grid" aria-hidden="true"></div>
-    <div class="brand-3d-glow" aria-hidden="true"></div>
-    <div class="brand-3d-ring brand-ring-one" aria-hidden="true"></div>
-    <div class="brand-3d-ring brand-ring-two" aria-hidden="true"></div>
-    <div class="brand-3d-tile brand-tile-one" aria-hidden="true"><span>FORM</span><b>01</b></div>
-    <div class="brand-3d-tile brand-tile-two" aria-hidden="true"><span>SIGNAL</span><i></i><i></i><i></i></div>
-    <div class="brand-3d-dot dot-one" aria-hidden="true"></div>
-    <div class="brand-3d-dot dot-two" aria-hidden="true"></div>
-    <div class="brand-3d-word" aria-hidden="true">ONLY</div>
-    <div class="brand-3d-caption">IDENTITY / 01</div>
-    <div class="brand-3d-status">MATERIAL FORM <i></i></div>
+  <div class="brand-3d brand-3d-identity" aria-label="Архитектурная объёмная композиция бренда ONLY">
+    <div class="identity-horizon" aria-hidden="true"></div>
+    <div class="identity-light identity-light-one" aria-hidden="true"></div>
+    <div class="identity-light identity-light-two" aria-hidden="true"></div>
+    <div class="identity-pillar pillar-left" aria-hidden="true"><span></span></div>
+    <div class="identity-pillar pillar-right" aria-hidden="true"><span></span></div>
+    <div class="identity-sculpture" aria-hidden="true">
+      <div class="identity-slab slab-top"></div>
+      <div class="identity-monogram"><span>O</span><span>N</span><span>L</span><span>Y</span></div>
+      <div class="identity-plinth"><i></i><b>ONLY</b><i></i></div>
+      <div class="identity-shadow"></div>
+    </div>
+    <div class="identity-coordinate coordinate-left" aria-hidden="true">X 04.7<br />Y 19.2</div>
+    <div class="identity-coordinate coordinate-right" aria-hidden="true">OBJECT<br />№ 01</div>
+    <div class="brand-3d-caption">IDENTITY / MONUMENT</div>
   </div>
 ) : (
   <div class="space-3d" aria-label="Цифровое пространство проекта ONLY">
